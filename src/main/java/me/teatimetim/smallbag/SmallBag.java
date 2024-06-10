@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +26,7 @@ import java.util.HashMap;
 public final class SmallBag extends JavaPlugin implements Listener {
 
     private final NamespacedKey KEY  = new NamespacedKey(this, "small_bag");
-    private HashMap<Player, Inventory> _openBags = new HashMap<Player, Inventory>();
+    private final HashMap<Player, Inventory> _openBags = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -58,10 +59,12 @@ public final class SmallBag extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
-        //validate player right-clicking w/ a bag
+        //validate player right-clicking w/ a bag w/o interacting with a block
         ItemStack heldItem = event.getItem();
+        Block clickedBlock = event.getClickedBlock();
         if (!clickIsRightClick(event)
-                || !heldItemIsSmallBag(heldItem))
+                || !heldItemIsSmallBag(heldItem)
+                || blockIsInteractable(clickedBlock))
             return;
 
         //open inventory, allow player to interact w/ inventory
@@ -92,9 +95,9 @@ public final class SmallBag extends JavaPlugin implements Listener {
         ShulkerBox bag = (ShulkerBox) bagMeta.getBlockState();
 
         Inventory bagNewInventory = event.getInventory();
-        Inventory bagOldInventory = bag.getInventory();
+        Inventory bagCurrentInventory = bag.getInventory();
 
-        bagOldInventory.setContents(bagNewInventory.getContents());
+        bagCurrentInventory.setContents(bagNewInventory.getContents());
 
         bagMeta.setBlockState(bag);
         heldItem.setItemMeta(bagMeta);
@@ -113,6 +116,11 @@ public final class SmallBag extends JavaPlugin implements Listener {
     private boolean clickIsRightClick(PlayerInteractEvent event) {
         return event.getAction() == Action.RIGHT_CLICK_AIR
                 || event.getAction() == Action.RIGHT_CLICK_BLOCK;
+    }
+
+    private boolean blockIsInteractable(Block block) {
+        return block != null
+                && block.getType().isInteractable();
     }
 
     private boolean heldItemIsSmallBag(ItemStack item) {
