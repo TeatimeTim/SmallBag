@@ -1,0 +1,3 @@
+This plugin is based off the craftable 'Small Bags' in MineZ on the Shotbow network. 
+
+A small bag can be crafted with 6 leather on the top and bottom rows, 2 iron ingots on either side of the middle row, and a chest in the center. When a player right-clicks with a small bag, a 9-slot inventory is opened. These bags essentially act as early shulkers (and infact have a shulker model) to bridge the gap in storage between early-game and post-dragon. These bags can be freely renamed, recolored (because they are shulkers), and exchanged between players. Unlike the MineZ bags, players are able to craft more than one small bag. 
