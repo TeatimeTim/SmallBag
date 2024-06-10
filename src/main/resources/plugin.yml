@@ -1,0 +1,4 @@
+name: SmallBag
+version: '${project.version}'
+main: me.teatimetim.smallbag.SmallBag
+api-version: '1.20'
